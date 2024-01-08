@@ -31,7 +31,7 @@ class UserFactory extends Factory
             'role' => 'admin',
             'password' => bcrypt('password'),
             'remember_token' => Str::random(10),
-            'tenant_id' => 1
+            'tenant_id' => Tenant::factory()
         ];
     }
 
