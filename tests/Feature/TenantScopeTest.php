@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\Tenant;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\File;
@@ -30,5 +32,20 @@ class TenantScopeTest extends TestCase
         // clean up
         File::delete(database_path('migrations/'.$filename));
         File::delete(app_path('Models/Test.php'));
+    }
+
+    public function test_a_user_can_only_see_users_in_the_same_tenant()
+    {
+        $tenant1 = Tenant::factory()->create();
+        $tenant2 = Tenant::factory()->create();
+
+        $user1 = User::factory()->create(['tenant_id' => $tenant1, 'created_at' => now()]);
+
+        User::factory(9)->create(['tenant_id' => $tenant1, 'created_at' => now()]);
+        User::factory(10)->create(['tenant_id' => $tenant2, 'created_at' => now()]);
+
+        auth()->login($user1);
+
+        $this->assertEquals(10, User::count());
     }
 }
