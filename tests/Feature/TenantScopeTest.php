@@ -39,10 +39,10 @@ class TenantScopeTest extends TestCase
         $tenant1 = Tenant::factory()->create();
         $tenant2 = Tenant::factory()->create();
 
-        $user1 = User::factory()->create(['tenant_id' => $tenant1, 'created_at' => now()]);
+        $user1 = User::factory()->create(['tenant_id' => $tenant1]);
 
-        User::factory(9)->create(['tenant_id' => $tenant1, 'created_at' => now()]);
-        User::factory(10)->create(['tenant_id' => $tenant2, 'created_at' => now()]);
+        User::factory(9)->create(['tenant_id' => $tenant1]);
+        User::factory(10)->create(['tenant_id' => $tenant2]);
 
         auth()->login($user1);
 
